@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const Users = require("./auth-model.js");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require('../config/secrets.js');
 
 router.post('/register', (req, res) => {
   // implement registration
@@ -31,7 +34,6 @@ router.post('/login', (req, res) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = signToken(user);
         res.status(200).json({ token });
-        // TODO Don't display passwords
       }
       else {
         res.status(401).json({ message: "You shall not pass!" });
